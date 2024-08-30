@@ -22,6 +22,12 @@ class OpenAiGpt4v:
             "required": {
                 "image": ("IMAGE",),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                "model": ([
+                    "gpt-4o",
+                    "gpt-4o-mini",
+                    "gpt-4-turbo",
+                    "gpt-4-vision-preview",
+                ], {"default": "gpt-4o"}),
                 "detail": (["auto", "low", "high"],),
                 "max_tokens": ("INT", {"default": 512, "min": 16, "max": 4096}),
                 "prompt": ("STRING", {
@@ -36,7 +42,7 @@ class OpenAiGpt4v:
     OUTPUT_NODE = False
     CATEGORY = "Generator"
 
-    def doit(self, image, seed, detail, max_tokens, prompt):
+    def doit(self, image, seed, model, detail, max_tokens, prompt):
         _ = seed
 
         im0 = torchvision.transforms.functional.to_pil_image(torch.permute(image[0], (2, 0, 1)))
@@ -50,7 +56,7 @@ class OpenAiGpt4v:
         }
 
         payload = {
-            "model": "gpt-4-vision-preview",
+            "model": model if model is not None and model != "" else "gpt-4o",
             "messages": [
                 {
                     "role": "user",
