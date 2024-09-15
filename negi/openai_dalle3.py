@@ -35,6 +35,7 @@ class OpenAiDalle3:
                 "retry": ("INT", {"default": 0, "min": 0, "max": 5}),
                 "auto_save": ("BOOLEAN", {"default": False}),
                 "auto_save_dir": ("STRING", {"multiline": False, "default": "./output_dalle3"}),
+                "blank_image_if_failed": ("BOOLEAN", {"default": False}),
             }
         }
 
@@ -44,7 +45,10 @@ class OpenAiDalle3:
     OUTPUT_NODE = True
     CATEGORY = "Generator"
 
-    def doit(self, resolution, dummy_seed, prompt, quality, style, retry, auto_save, auto_save_dir):
+    def doit(
+            self, resolution, dummy_seed, prompt, quality, style, retry, auto_save, auto_save_dir,
+            blank_image_if_failed):
+
         if (self.__cache_image is None or
                 self.__previous_resolution != resolution or self.__previous_seed != dummy_seed or
                 self.__previous_prompt != prompt):
@@ -63,6 +67,11 @@ class OpenAiDalle3:
                     break
                 except openai.BadRequestError as ex:
                     if retry_count >= retry:
+                        print("OpenAiDalle3: received BadRequestError: %s" % (json.dumps(ex.response.json()),))
+                        if blank_image_if_failed:
+                            widths = resolution.split("x")
+                            xw, yw = int(widths[0]), int(widths[1])
+                            return torch.zeros(1, yw, xw, 4), xw, yw, "(BadRequestError)"
                         raise ex
                     print("OpenAiDalle3: received BadRequestError, retrying... #%d : %s" % (
                         retry_count + 1, json.dumps(ex.response.json())))
