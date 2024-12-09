@@ -26,6 +26,8 @@ from . import util
 from .body import Body, BodyResult, Keypoint
 from .face import Face
 from .hand import Hand
+from configs.config import get_juicefs_full_path_safemode
+from configs.node_fields import NegiTools_Model_Mapping
 
 HandResult = List[Keypoint]
 FaceResult = List[Keypoint]
@@ -81,7 +83,7 @@ class OpenposeDetector:
 
     @classmethod
     def from_pretrained(cls, pretrained_model_or_path, filename=None, hand_filename=None, face_filename=None, cache_dir=None):
-
+        
         if pretrained_model_or_path == "lllyasviel/ControlNet":
             filename = filename or "annotator/ckpts/body_pose_model.pth"
             hand_filename = hand_filename or "annotator/ckpts/hand_pose_model.pth"
@@ -94,7 +96,7 @@ class OpenposeDetector:
             face_filename = face_filename or "facenet.pth"
 
             face_pretrained_model_or_path = pretrained_model_or_path
-
+        '''
         if os.path.isdir(pretrained_model_or_path):
             body_model_path = os.path.join(pretrained_model_or_path, filename)
             hand_model_path = os.path.join(pretrained_model_or_path, hand_filename)
@@ -103,6 +105,11 @@ class OpenposeDetector:
             body_model_path = hf_hub_download(pretrained_model_or_path, filename, cache_dir=cache_dir)
             hand_model_path = hf_hub_download(pretrained_model_or_path, hand_filename, cache_dir=cache_dir)
             face_model_path = hf_hub_download(face_pretrained_model_or_path, face_filename, cache_dir=cache_dir)
+        '''
+        body_model_path = get_juicefs_full_path_safemode(NegiTools_Model_Mapping, filename)
+        hand_model_path = get_juicefs_full_path_safemode(NegiTools_Model_Mapping, hand_filename)
+        face_model_path = get_juicefs_full_path_safemode(NegiTools_Model_Mapping, face_filename)
+        #print(f"body_model_path:{body_model_path},hand_model_path:{hand_model_path},face_model_path:{face_model_path}")
 
         body_estimation = Body(body_model_path)
         hand_estimation = Hand(hand_model_path)

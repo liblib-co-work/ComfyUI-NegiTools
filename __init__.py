@@ -15,23 +15,25 @@ from .negi.openai_gpt4v import OpenAiGpt4v
 from .negi.openai_gpt import OpenAiGpt
 
 NODE_CLASS_MAPPINGS = {
-    "NegiTools_OpenAiDalle3": OpenAiDalle3,
-    "NegiTools_OpenAiTranslate": OpenAiTranslate,
+    #"NegiTools_OpenAiDalle3": OpenAiDalle3,
+    #"NegiTools_OpenAiTranslate": OpenAiTranslate,
     "NegiTools_StringFunction": StringFunction,
     "NegiTools_SeedGenerator": SeedGenerator,
     "NegiTools_ImageProperties": ImageProperties,
     "NegiTools_LatentProperties": LatentProperties,
     "NegiTools_CompositeImages": CompositeImages,
     "NegiTools_NoiseImageGenerator": NoiseImageGenerator,
-    "NegiTools_OpenPoseToPointList": OpenPoseToPointList,
+    "NegiTools_OpenPoseToPointList": OpenPoseToPointList,#重点看
     "NegiTools_PointListToMask": PointListToMask,
-    "NegiTools_DepthEstimationByMarigold": DepthEstimationByMarigold,
+    #Depth Estimation by Marigold (experimental)" module is not maintained and will be discontinued in the future
+    #"NegiTools_DepthEstimationByMarigold": DepthEstimationByMarigold,
+    #需要先下载代码到路径下
     "NegiTools_StereoImageGenerator": StereoImageGenerator,
     "NegiTools_RandomImageLoader": RandomImageLoader,
     "NegiTools_SaveImageToDirectory": SaveImageToDirectory,
     "NegiTools_DetectFaceRotationForInpainting": DetectFaceRotationForInpainting,
-    "NegiTools_OpenAiGpt4v": OpenAiGpt4v,
-    "NegiTools_OpenAiGpt": OpenAiGpt,
+    #"NegiTools_OpenAiGpt4v": OpenAiGpt4v,
+    #"NegiTools_OpenAiGpt": OpenAiGpt,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
